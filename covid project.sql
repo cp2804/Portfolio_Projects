@@ -27,12 +27,14 @@ where location like 'India'
 
 --Looking at the countries with Highest infection rate compared to the population
 
-Select location,population,max(total_cases)as HighestinfectionCount,
-MAX(CAST( total_cases as bigint) /CAST( population as bigint)) * 100 AS Percentageofpopulation
-from Portfolio_project..CovidDeaths 
-group by location,population
---where location like 'India'
-order by 1
+SELECT  location AS country,
+  CAST(population AS FLOAT) AS population,
+  MAX(CAST(new_cases AS FLOAT)) AS highest_infectious_rate,
+  (SUM(CAST(new_cases AS FLOAT)) / CAST(population AS FLOAT)) * 100 AS percentage_of_population_infected
+FROM Portfolio_project..CovidDeaths
+WHERE CAST(population AS FLOAT) > 0
+GROUP BY location, population
+ORDER BY percentage_of_population_infected DESC;
 
 --Showing highest death count as per population
 
